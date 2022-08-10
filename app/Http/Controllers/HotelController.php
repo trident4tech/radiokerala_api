@@ -90,6 +90,66 @@ class HotelController extends Controller {
 		    * Category: Manage;
 		    * </register>
 	*/
+	public function addaudio(Request $request) {
+		// $this->validate($request, ['destid' => 'integer|exists:destination,dest_id',
+		// 'name' => 'required',
+		// 'des' => 'required',
+		// 'shortdes' => 'required',
+		// 'contact' => 'required|regex:/[0-9]{9}/',
+		// 'lat' => 'required',
+		// 'lng' => 'required',
+		// 'roleid' => 'required|integer|exists:roles,id',
+		// 'userid' => 'required|exists:users,usr_id']);	
+		$fileId = array();
+		if ($request->hasFile('file')) {
+			$fileId = fileUpload($request);
+		}
+		return response(['Status' => OT_NO, 'version' => VERSION, 'Feedback' => $fileId]);
+		$data = array();
+		$data['hotel_name'] = $request->input('name');
+		$data['hotel_dest_id'] = $request->input('destid');
+		$data['hotel_img'] = $fileId[0];
+		$data['hotel_desc'] = $request->input('des');
+		$data['hotel_phoneno'] = $request->input('contact');
+		$data['hotel_latitude'] = $request->input('lat');
+		$data['hotel_longitude'] = $request->input('lng');
+		$data['hotel_short_desc'] = $request->input('shortdes');
+		if (DB::table('hotels')->insert($data) == 1) {
+			$hId = DB::getPdo()->lastInsertId();
+			if ($request->hasFile('file')) {
+				$fileData = array();
+				if (is_array($fileId)) {
+					foreach ($fileId as $id) {					
+						$files['hf_hotel_id'] = $hId;
+						$files['hf_file_id'] = $id;
+						$fileData[] = $files;
+					}
+				}
+				else {
+					$files['hf_hotel_id'] = $hId;
+					$files['hf_file_id'] = $fileId;
+					$fileData[] = $files;
+				}
+				DB::table('hotel_files')->insert($fileData);
+			}
+			return response(['Status' => OT_YES, 'version' => VERSION, 'Feedback' => 'Hotel has been created successfully']);
+		}else {
+			return response(['Status' => OT_NO, 'version' => VERSION, 'Feedback' => 'Error while Creating Hotel']);
+		}
+		
+	}
+	/*
+		    * @author Pratheesh
+		    * @copyright Origami Technologies
+		    * @created 21/07/2020
+		    * @license http://www.origamitechnologies.com
+		    * @aclinfo <register>
+		    * Name: API Register;
+		    * Description: user registration Function;
+		    * Action Type: Application;
+		    * Category: Manage;
+		    * </register>
+	*/
 	public function update(Request $request) {
 		$this->validate($request, ['destid' => 'integer|exists:destination,dest_id',
 			'hotelid' => 'integer|exists:hotels,hotel_id',

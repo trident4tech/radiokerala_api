@@ -68,12 +68,12 @@ if (!function_exists('fileUpload')) {
                     $data['file_size'] = $fileSize;
                     $data['file_org_name'] = $originalFilename;
                     $fileData = Core_file::create($data);
-                    if ($count==1) {
-                        return $fileData->file_id;
-                    }
-                    else {
+                    // if ($count==1) {
+                    //     return $fileData->file_id;
+                    // }
+                    // else {
                         $fileArray[] = $fileData->file_id;
-                    }                
+                   // }                
 			     } else {
 				    return 0;
 			     }                 
