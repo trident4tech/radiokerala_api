@@ -20,7 +20,10 @@ $router->get('/', function () use ($router) {
 //}); this route is used to generate APP_KEY
 
 $router->group(['prefix' => 'v1'], function () use ($router) {
-	$router->POST('/hotel/add', ['uses' => 'HotelController@add']);
+	$router->POST('/survey/add', ['uses' => 'SurveyController@add']);
+	$router->POST('/survey/delete', ['uses' => 'SurveyController@delete']);
+	$router->POST('/survey/list', ['uses' => 'SurveyController@list']);
+	$router->POST('/hotel/add', ['uses' => 'HotelController@add']);	
 	$router->POST('/hotel/list', ['uses' => 'HotelController@list']);
 	$router->POST('/hotel/delete', ['uses' => 'HotelController@delete']);
 	$router->POST('/hotel/changestatus', ['uses' => 'HotelController@changestatus']);

@@ -50,6 +50,7 @@ class SurveyController extends Controller {
 		if ($request->hasFile('file')) {
 			$fileId = fileUpload($request);
 		}
+
 		$i = 0;
 		for($i = 0;$i<count($name);$i++){
 			$data = array();
@@ -95,11 +96,16 @@ class SurveyController extends Controller {
 		$this->validate($request, ['userid' => 'required|integer|exists:users,usr_id']);
 		$baseSelectQuery = DB::table('survey');		
 		$baseSelectQuery->leftjoin('core_files', 'core_files.file_id', '=', 'survey.sr_file_id');
-
+		if ($request->input('date') != '') {
+			$baseSelectQuery->where('survey.sr_date','>=',$request->input('date'));
+		}
+		if ($request->input('tdate') != '') {
+			$baseSelectQuery->where('survey.sr_date','<=',$request->input('tdate'));
+		}
 		if ($request->input($this->paginator) != '') {
-			$user = $baseSelectQuery->select('survey.*', 'core_files.*')->whereNull('survey.deleted_at')->orderBy('survey.sr_id')->paginate($request->input($this->paginator));
+			$user = $baseSelectQuery->select('survey.*', 'core_files.*')->whereNull('survey.deleted_at')->orderBy('survey.sr_id','desc')->paginate($request->input($this->paginator));
 		} else {
-			$user = $baseSelectQuery->select('survey.*', 'core_files.*')->whereNull('survey.deleted_at')->orderBy('survey.sr_id')->get();
+			$user = $baseSelectQuery->select('survey.*', 'core_files.*')->whereNull('survey.deleted_at')->orderBy('survey.sr_id','desc')->get();
 		}
 
 		return response()->json(['Status' => OT_YES, 'Feedback' => 'Success', 'Data' => $user]);
