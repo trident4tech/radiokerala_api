@@ -29,6 +29,7 @@ class ConstantController extends Controller
     public function __construct(Request $request)
     {
     }
+    
     /*
     * @author Pratheesh
     * @copyright Origami Technologies
