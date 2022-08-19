@@ -18,6 +18,7 @@ class TicketController extends Controller
 	 *
 	 * @return void
 	 */
+	
 	private $paginator = 'p';
 	public function __construct(Request $request)
 	{
