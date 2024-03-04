@@ -117,7 +117,7 @@ class UserController extends Controller {
 			Auth::factory()->setTTL($myTTL);
 			$token = '';
 			if (!$token = Auth::attempt($credentials)) {
-				return response()->json(['Status' => OT_NO, 'version' => VERSION, 'Feedback' => 'Credential missmatch']);
+				return response()->json(['Status' => OT_NO, 'a'=>Auth::attempt($credentials),'version' => VERSION, 'Feedback' => 'Credential missmatch']);
 			}
 			$user = User::where('usr_user_name', '=', $request->input('usr_user_name'))->firstOrFail();
 			if ($user->usr_is_logged_in == OT_YES && $user->usr_is_ticket_staff == OT_YES) {
